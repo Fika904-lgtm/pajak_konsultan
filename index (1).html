@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Konsultan Pajak Nusantara</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --ink:#22265a; --paper:#ffffff;
+  --bg:#a9e2ff; --dot:#8fd3fa; --on-bg:#22265a;
+  --yellow:#ffd23f; --coral:#ff6b6b; --mint:#35d6a4; --sky:#4cc9f0; --grape:#8b6cf0; --soft:#fff2b8;
+  --font:'Fredoka','Arial Rounded MT Bold','Trebuchet MS',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#1a1d4d;--dot:#282d6e;--on-bg:#ffffff}
+}
+:root[data-theme="dark"]{--bg:#1a1d4d;--dot:#282d6e;--on-bg:#ffffff}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
+body{margin:0;font-family:var(--font);font-size:16px;line-height:1.45;color:var(--on-bg);
+  background-color:var(--bg);background-image:radial-gradient(var(--dot) 2.5px,transparent 3px);background-size:22px 22px;min-height:100vh}
+#app{max-width:520px;margin:0 auto;padding:14px 14px 44px}
+h1,h2,h3{margin:0;font-weight:700;line-height:1.15}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+:focus-visible{outline:4px solid var(--grape);outline-offset:2px}
+
+/* kartu & tombol */
+.card{background:var(--paper);color:var(--ink);border:3px solid var(--ink);border-radius:22px;box-shadow:0 5px 0 var(--ink);padding:14px;margin:0 0 16px}
+.btn{display:block;width:100%;background:var(--yellow);color:var(--ink);border:3px solid var(--ink);border-radius:14px;box-shadow:0 5px 0 var(--ink);
+  padding:12px 16px;font-weight:700;font-size:18px;cursor:pointer;text-align:center;transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.btn.mint{background:var(--mint)} .btn.coral{background:var(--coral);color:#fff} .btn.white{background:#fff} .btn.sky{background:var(--sky)}
+.btn.small{display:inline-block;width:auto;padding:6px 12px;font-size:15px;box-shadow:0 3px 0 var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:0 2px 0 var(--ink);transform:translateY(2px)}
+.icon{width:44px;height:44px;flex:none;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:14px;box-shadow:0 3px 0 var(--ink);font-size:20px;cursor:pointer}
+.icon:active{transform:translateY(3px);box-shadow:none}
+.stack>*+*{margin-top:12px}
+.center{text-align:center}
+.muted{opacity:.75;font-size:14px}
+
+/* start */
+.hero{text-align:center;padding-top:6px}
+.title{font-size:44px;color:var(--yellow);-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;text-shadow:0 5px 0 var(--ink);letter-spacing:.5px;transform:rotate(-2deg);margin:4px 0 2px}
+.title.two{color:var(--coral);transform:rotate(1.5deg);font-size:38px}
+.scene{width:100%;max-width:340px;height:auto;display:block;margin:6px auto 0}
+.mascot-row{display:flex;align-items:flex-end;gap:8px;margin:0 0 14px}
+.rupi{width:92px;flex:none;animation:hop 1.6s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes hop{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.say{position:relative;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:18px 18px 18px 4px;padding:10px 14px;font-weight:500;flex:1;margin-bottom:26px}
+.field-l{display:block;font-weight:600;margin:0 0 6px}
+.txt{width:100%;border:3px solid var(--ink);border-radius:14px;padding:11px 14px;background:#fff;color:var(--ink);font-weight:500}
+.avs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.avb{border:3px solid var(--ink);border-radius:18px;background:var(--sky);padding:2px;cursor:pointer;aspect-ratio:1}
+.avb svg{width:100%;height:100%;display:block}
+.avb[aria-pressed="true"]{background:var(--yellow);box-shadow:0 4px 0 var(--ink);transform:translateY(-3px) rotate(-3deg)}
+
+/* hub */
+.head{display:flex;gap:12px;align-items:center}
+.me{width:64px;height:64px;border:3px solid var(--ink);border-radius:50%;background:var(--yellow);overflow:hidden;flex:none}
+.me svg,.mini svg,.big svg,.cav svg{width:100%;height:100%;display:block}
+.head b{font-size:20px}
+.pill{display:inline-block;background:var(--soft);border:2px solid var(--ink);border-radius:999px;padding:1px 10px;font-size:14px;font-weight:600;margin:4px 6px 0 0}
+.bar{height:14px;border:3px solid var(--ink);border-radius:999px;background:#fff;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--mint);transition:width .4s}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.cl{background:var(--paper);color:var(--ink);border:3px solid var(--ink);border-radius:22px;box-shadow:0 5px 0 var(--ink);padding:10px 10px 12px;text-align:center;cursor:pointer;position:relative;font-weight:600}
+.cl:nth-child(odd){transform:rotate(-1.5deg)} .cl:nth-child(even){transform:rotate(1.5deg)}
+.cl:active{transform:translateY(3px)}
+.cav{width:84px;height:84px;margin:0 auto 6px;border:3px solid var(--ink);border-radius:50%;overflow:hidden}
+.cl b{display:block;font-size:17px;line-height:1.15}
+.cl small{display:block;font-weight:500;font-size:13px;margin:2px 0 6px}
+.badge{display:inline-block;border:2px dashed var(--ink);border-radius:10px;padding:1px 8px;font-size:13px;opacity:.7}
+.badge.ok{border-style:solid;background:var(--mint);opacity:1;transform:rotate(-4deg);font-weight:700}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pulse{animation:pl 1.2s ease-in-out infinite}
+@keyframes pl{50%{transform:scale(1.03)}}
+
+/* misi */
+.mbar{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+.mtitle{flex:1;min-width:0;background:var(--paper);color:var(--ink);border:3px solid var(--ink);border-radius:14px;padding:4px 10px;line-height:1.15}
+.mtitle span{display:block;font-size:13px;font-weight:500}
+.steps{display:flex;gap:6px;margin:0 0 14px}
+.steps span{flex:1;text-align:center;font-size:13px;font-weight:600;padding:6px 2px;border:3px solid var(--ink);border-radius:12px;background:var(--paper);color:var(--ink)}
+.steps .on{background:var(--yellow)} .steps .done{background:var(--mint)}
+.chat{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.msg{display:flex;gap:8px;align-items:flex-end}
+.msg.me{justify-content:flex-end}
+.mini{width:44px;height:44px;border:3px solid var(--ink);border-radius:50%;background:var(--sky);overflow:hidden;flex:none}
+.bubble{max-width:82%;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:6px 18px 18px 18px;padding:9px 13px;font-weight:500}
+.msg.me .bubble{background:var(--yellow);border-radius:18px 6px 18px 18px}
+.msg.pop{animation:pop .25s ease-out}
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.note{background:var(--soft);color:var(--ink);border:3px solid var(--ink);border-radius:6px 16px 16px 16px;padding:10px 14px;margin:0 0 14px;transform:rotate(-.6deg)}
+.note ul{margin:6px 0 0;padding-left:20px}
+.note.empty{opacity:.85}
+.quota{display:flex;align-items:center;gap:4px;margin:0 0 10px;font-weight:600}
+.coin{font-size:22px} .coin.used{filter:grayscale(1);opacity:.35}
+.qs{display:grid;gap:8px;margin-bottom:12px}
+.q{background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:14px;padding:10px 12px;text-align:left;font-weight:500;cursor:pointer;box-shadow:0 3px 0 var(--ink)}
+.q:active{transform:translateY(3px);box-shadow:none}
+.q:disabled{opacity:.4;box-shadow:none;transform:translateY(3px);cursor:not-allowed}
+.opt{display:block;width:100%;background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:14px;padding:11px 13px;margin-top:10px;text-align:left;font-weight:500;cursor:pointer;box-shadow:0 3px 0 var(--ink)}
+.opt:active{transform:translateY(3px);box-shadow:none}
+.opt.bad{background:#ffd3d3;text-decoration:line-through;opacity:.8;box-shadow:none}
+.opt.good{background:#c6f5e3;box-shadow:0 3px 0 var(--ink)}
+.fb{border:3px dashed var(--ink);border-radius:14px;padding:10px 12px;margin-top:12px;background:var(--soft);color:var(--ink)}
+.shake{animation:sh .3s}
+@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* formulir pajak */
+.doc{background:#fff;color:var(--ink);border:3px solid var(--ink);border-radius:8px 22px 8px 22px;box-shadow:0 5px 0 var(--ink);padding:14px;margin-bottom:16px;position:relative;
+  background-image:repeating-linear-gradient(transparent 0 31px,rgba(76,201,240,.25) 31px 32px)}
+.doc h3{font-size:19px;padding-right:76px}
+.ribbon{position:absolute;top:-2px;right:12px;background:var(--coral);color:#fff;border:3px solid var(--ink);border-top:0;border-radius:0 0 12px 12px;padding:6px 10px;font-weight:700;font-size:13px}
+.grp{margin:14px 0 4px;font-weight:700;background:var(--sky);border:2px solid var(--ink);border-radius:10px;padding:2px 10px;display:inline-block}
+.frow{margin-top:10px}
+.frow label{display:block;font-weight:600;font-size:15px;margin-bottom:4px}
+.frow.info{display:flex;justify-content:space-between;gap:8px;background:var(--soft);border:2px solid var(--ink);border-radius:10px;padding:6px 10px}
+.inwrap{display:flex;align-items:center;border:3px solid var(--ink);border-radius:12px;background:#fff;overflow:hidden}
+.inwrap i{font-style:normal;font-weight:700;padding:0 10px;align-self:stretch;display:flex;align-items:center;background:var(--yellow);border-right:3px solid var(--ink)}
+.inwrap input{border:0;outline:0;background:transparent;padding:10px;width:100%;min-width:0;font-weight:600;color:var(--ink)}
+.frow select{width:100%;border:3px solid var(--ink);border-radius:12px;padding:10px;background:#fff;color:var(--ink);font-weight:600}
+.frow.ok .inwrap,.frow.ok select{background:#c6f5e3}
+.frow.bad .inwrap,.frow.bad select{background:#ffd3d3}
+.frow.reveal .inwrap,.frow.reveal select{background:#e5dcff}
+.hint{font-size:14px;margin-top:4px;font-weight:500}
+
+/* hasil */
+.big{width:150px;height:150px;margin:0 auto 6px;border:3px solid var(--ink);border-radius:50%;background:var(--sky);overflow:hidden}
+.score{display:flex;justify-content:space-between;padding:5px 0;border-bottom:2px dotted var(--ink);font-weight:500}
+.score.total{border:0;font-size:22px;font-weight:700;padding-top:10px}
+.stamp{display:inline-block;border:4px solid var(--coral);color:var(--coral);border-radius:12px;padding:2px 14px;font-weight:700;font-size:22px;transform:rotate(-7deg);animation:stamp .35s ease-out}
+@keyframes stamp{from{transform:rotate(-7deg) scale(2.2);opacity:0}to{transform:rotate(-7deg) scale(1);opacity:1}}
+ul.pts{margin:8px 0 0;padding-left:20px}
+ul.pts li+li{margin-top:6px}
+table.rap{width:100%;border-collapse:collapse}
+table.rap td{padding:8px 4px;border-bottom:2px dotted var(--ink);font-weight:500}
+table.rap td:last-child{text-align:right;font-weight:700}
+.code{word-break:break-all;background:var(--soft);border:2px dashed var(--ink);border-radius:10px;padding:8px;font-size:13px;font-family:ui-monospace,Menlo,Consolas,monospace}
+
+/* sheet, kalkulator, buku saku */
+.sheet-wrap{position:fixed;inset:0;background:rgba(20,22,60,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.sheet{width:100%;max-width:520px;max-height:88%;overflow:auto;background:var(--paper);color:var(--ink);border:3px solid var(--ink);border-bottom:0;border-radius:24px 24px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom,0px))}
+.sheet h2{font-size:22px;margin-bottom:8px}
+details{border:3px solid var(--ink);border-radius:14px;margin-top:10px;background:#fff}
+summary{cursor:pointer;font-weight:700;padding:10px 12px;list-style:none}
+summary::-webkit-details-marker{display:none}
+details[open] summary{background:var(--yellow);border-radius:10px 10px 0 0;border-bottom:3px solid var(--ink)}
+.dbody{padding:4px 12px 12px;font-size:15px}
+.dbody ul{padding-left:18px;margin:6px 0}
+.ver{display:inline-block;background:var(--coral);color:#fff;border-radius:8px;padding:0 7px;font-size:12px;font-weight:600;margin-left:4px;vertical-align:1px}
+table.ter{width:100%;border-collapse:collapse;font-size:14px;margin:6px 0}
+table.ter th,table.ter td{border:2px solid var(--ink);padding:3px 6px;text-align:right}
+table.ter th{background:var(--sky);text-align:center}
+.disp{background:var(--ink);color:#fff;border-radius:12px;padding:12px;text-align:right;font-size:26px;min-height:54px;overflow-x:auto;white-space:nowrap;margin-bottom:10px;font-weight:600}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.keys button{padding:12px 0;border:3px solid var(--ink);border-radius:12px;background:#fff;color:var(--ink);font-size:20px;font-weight:700;cursor:pointer;box-shadow:0 3px 0 var(--ink)}
+.keys button:active{transform:translateY(3px);box-shadow:none}
+.keys .op{background:var(--sky)} .keys .eq{background:var(--yellow)} .keys .cl2{background:var(--coral);color:#fff}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;border:3px solid #fff;border-radius:14px;padding:8px 16px;font-weight:600;z-index:60;max-width:90%;text-align:center}
+.foot{font-size:13px;text-align:center;margin-top:8px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="sheet"></div>
+<div id="toast"></div>
+<noscript><p style="padding:20px">Aktifkan JavaScript untuk memainkan game ini.</p></noscript>
+
+<script>
+"use strict";
+const INK = '#22265a';
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rp = n => 'Rp' + Number(n).toLocaleString('id-ID');
+
+/* ===== AVATAR KARTUN (SVG) ===== */
+function avatar(c, mood) {
+  mood = mood || 'happy';
+  const skin = c.skin || '#f6c39a', hair = c.hair || '#2b1d1a', shirt = c.shirt || '#4cc9f0';
+  const S = `stroke="${INK}" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"`;
+  const hij = c.style === 'hijab';
+  let back = '', front = '';
+  if (hij) back = `<ellipse cx="50" cy="54" rx="35" ry="38" fill="${hair}" ${S}/>`;
+  if (c.style === 'bob') back = `<path d="M17 58 Q14 14 50 13 Q86 14 83 58 L83 72 Q50 66 17 72Z" fill="${hair}" ${S}/>`;
+  if (c.style === 'bun') back = `<circle cx="50" cy="10" r="11" fill="${hair}" ${S}/>`;
+  if (c.style === 'bob' || c.style === 'bun')
+    front = `<path d="M24 46 Q26 17 50 17 Q74 17 76 46 Q62 30 50 34 Q36 30 24 46Z" fill="${hair}" ${S}/>`;
+  if (c.style === 'spiky')
+    front = `<path d="M22 44 L19 27 L32 31 L34 12 L44 25 L54 8 L60 25 L72 12 L72 31 L82 27 L78 44 Q50 28 22 44Z" fill="${hair}" ${S}/>`;
+  if (c.style === 'cap')
+    front = `<path d="M22 40 Q24 11 50 11 Q76 11 78 40Z" fill="${c.cap || '#ff6b6b'}" ${S}/><path d="M60 37 L93 41 L91 48 L58 44Z" fill="${c.cap || '#ff6b6b'}" ${S}/><circle cx="50" cy="11" r="3" fill="#fff" ${S}/>`;
+  const cy = hij ? 54 : 48, rx = hij ? 23 : 27, ry = hij ? 26 : 28, dy = hij ? 5 : 0;
+  const head = `<ellipse cx="50" cy="${cy}" rx="${rx}" ry="${ry}" fill="${skin}" ${S}/>`;
+  const eyeN = `<ellipse cx="39" cy="50" rx="3.6" ry="4.6" fill="${INK}"/><ellipse cx="61" cy="50" rx="3.6" ry="4.6" fill="${INK}"/><circle cx="40.3" cy="48.4" r="1.3" fill="#fff"/><circle cx="62.3" cy="48.4" r="1.3" fill="#fff"/>`;
+  const eyeJ = `<path d="M34 53 Q39 45 44 53M56 53 Q61 45 66 53" fill="none" stroke="${INK}" stroke-width="3.2" stroke-linecap="round"/>`;
+  let eyes = mood === 'joy' ? eyeJ : eyeN, brows = '', mouth = '', extra = '';
+  if (mood === 'worried') brows = `<path d="M33 43 L45 39M55 39 L67 43" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`;
+  if (mood === 'angry') brows = `<path d="M33 38 L45 44M55 44 L67 38" stroke="${INK}" stroke-width="3.4" stroke-linecap="round"/>`;
+  if (mood === 'think') brows = `<path d="M33 42 L45 42M55 38 Q61 35 67 39" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`;
+  if (mood === 'happy' || mood === 'joy') mouth = `<path d="M39 60 Q50 76 61 60Z" fill="#8a1c3a" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><path d="M45 66 Q50 71 55 66" fill="#ff8fa3"/>`;
+  if (mood === 'neutral') mouth = `<path d="M42 64 Q50 68 58 64" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`;
+  if (mood === 'worried') { mouth = `<path d="M41 67 Q45.5 62 50 66 Q54.5 70 59 65" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`; extra = `<path d="M76 28 Q81 37 76 42 Q71 37 76 28Z" fill="#8fdcff" stroke="${INK}" stroke-width="2.5"/>`; }
+  if (mood === 'angry') mouth = `<path d="M41 68 Q50 59 59 68" fill="none" stroke="${INK}" stroke-width="3.2" stroke-linecap="round"/>`;
+  if (mood === 'think') mouth = `<ellipse cx="50" cy="65" rx="3.4" ry="4" fill="#8a1c3a" stroke="${INK}" stroke-width="2.5"/>`;
+  const blush = `<circle cx="30" cy="59" r="4.5" fill="#ff8fa3" opacity=".65"/><circle cx="70" cy="59" r="4.5" fill="#ff8fa3" opacity=".65"/>`;
+  const gl = c.glasses ? `<circle cx="39" cy="50" r="9" fill="rgba(255,255,255,.35)" stroke="${INK}" stroke-width="2.8"/><circle cx="61" cy="50" r="9" fill="rgba(255,255,255,.35)" stroke="${INK}" stroke-width="2.8"/><path d="M48 50 L52 50" stroke="${INK}" stroke-width="2.8"/>` : '';
+  const body = `<path d="M12 104 C12 78 28 70 50 70 C72 70 88 78 88 104Z" fill="${shirt}" ${S}/>`;
+  return `<svg viewBox="0 0 100 100" role="img" aria-label="Karakter kartun">${body}${back}${head}<g transform="translate(0 ${dy})">${blush}${eyes}${brows}${gl}${mouth}</g>${front}${extra}</svg>`;
+}
+
+const RUPI = `<svg viewBox="0 0 120 130" class="rupi" role="img" aria-label="Si Rupi, maskot koin">
+<g stroke="${INK}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+<path d="M46 100 L42 121M74 100 L78 121M36 122 h12M72 122 h12" fill="none"/>
+<path d="M18 66 Q4 58 8 40M102 66 Q114 76 110 92" fill="none"/>
+<circle cx="8" cy="38" r="6" fill="#ffd23f"/><circle cx="110" cy="94" r="6" fill="#ffd23f"/>
+<circle cx="60" cy="60" r="44" fill="#ffd23f"/>
+<circle cx="60" cy="60" r="34" fill="none" stroke="#e0a100" stroke-width="3" stroke-dasharray="2 7"/>
+</g>
+<ellipse cx="46" cy="54" rx="4.5" ry="6.5" fill="${INK}"/><ellipse cx="74" cy="54" rx="4.5" ry="6.5" fill="${INK}"/>
+<circle cx="47.6" cy="51.5" r="1.7" fill="#fff"/><circle cx="75.6" cy="51.5" r="1.7" fill="#fff"/>
+<circle cx="36" cy="68" r="5" fill="#ff8fa3" opacity=".7"/><circle cx="84" cy="68" r="5" fill="#ff8fa3" opacity=".7"/>
+<path d="M47 68 Q60 84 73 68Z" fill="#8a1c3a" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>
+<path d="M30 42 Q34 30 46 26" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".85"/>
+</svg>`;
+
+const SCENE = `<svg viewBox="0 0 320 170" class="scene" role="img" aria-label="Gedung Kantor Pajak kartun" style="font-family:'Fredoka','Trebuchet MS',sans-serif">
+<g stroke="${INK}" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+<g fill="#fff"><ellipse cx="52" cy="26" rx="26" ry="12"/><ellipse cx="72" cy="20" rx="18" ry="11"/><ellipse cx="262" cy="34" rx="24" ry="11"/><ellipse cx="280" cy="28" rx="15" ry="9"/></g>
+<rect x="8" y="150" width="304" height="18" rx="8" fill="#35d6a4"/>
+<rect x="64" y="46" width="192" height="104" rx="10" fill="#ffd23f"/>
+<rect x="88" y="14" width="144" height="38" rx="10" fill="#ff6b6b"/>
+<rect x="80" y="68" width="48" height="36" rx="6" fill="#bde7ff"/><path d="M104 68 V104 M80 86 H128" fill="none"/>
+<rect x="192" y="68" width="48" height="36" rx="6" fill="#bde7ff"/><path d="M216 68 V104 M192 86 H240" fill="none"/>
+<rect x="140" y="92" width="40" height="58" rx="8" fill="#8b6cf0"/><circle cx="171" cy="124" r="3.5" fill="#ffd23f"/>
+<circle cx="30" cy="118" r="22" fill="#35d6a4"/><rect x="26" y="136" width="8" height="14" fill="#a5642e"/>
+<circle cx="288" cy="112" r="16" fill="#ffd23f"/><text x="288" y="118" text-anchor="middle" font-size="16" font-weight="700" fill="${INK}" stroke="none">Rp</text>
+</g>
+<text x="160" y="39" text-anchor="middle" font-size="19" font-weight="700" fill="#fff" stroke="${INK}" stroke-width="4" paint-order="stroke" stroke-linejoin="round">KANTOR PAJAK</text>
+</svg>`;
+
+/* ===== DATA KLIEN & KASUS ===== */
+const AV = [
+  {style:'hijab', hair:'#7b5cff', skin:'#f6c39a', shirt:'#35d6a4'},
+  {style:'cap', hair:'#3b2a20', skin:'#e0a877', shirt:'#ff6b6b', cap:'#4cc9f0'},
+  {style:'bob', hair:'#2b1d1a', skin:'#f6c39a', shirt:'#8b6cf0', glasses:1},
+  {style:'spiky', hair:'#2b1d1a', skin:'#c98e5f', shirt:'#ffd23f'}
+];
+
+const CL = [
+{
+  id:'dinda', name:'Kak Dinda', topic:'NPWP & PPh final', bg:'#ffb3d1', av:{style:'bun', hair:'#ff5fa2', skin:'#f6c39a', shirt:'#ffd23f'},
+  intro:'Halo kak konsultan! Aku jualan stiker & totebag desain sendiri di marketplace. Katanya aku harus punya NPWP dan bayar pajak. Aku wajib nggak sih? 😵',
+  qs:[
+    {t:'Total omzet penjualan setahun berapa?', r:'Kalau dijumlah semua tokoku, totalnya Rp620.000.000 setahun, kak!', key:1, note:'Omzet setahun: Rp620.000.000'},
+    {t:'Kakak sudah punya NPWP atau belum?', r:'Belum, kak. Aku baru tahu NIK di KTP sekarang bisa dipakai jadi NPWP. Belum kudaftarin sih...', key:1, note:'Status: belum punya NPWP (NIK belum diaktivasi)'},
+    {t:'Kakak pakai pembukuan atau skema pajak final UMKM?', r:'Aku belum pernah bikin pembukuan rapi, jadi pakai skema final UMKM 0,5% dari omzet aja. Ini tahun pertamaku usaha.', key:1, note:'Skema: PPh final UMKM 0,5% dari omzet, wajib pajak orang pribadi, tahun ke-1'},
+    {t:'Desain stikernya pakai aplikasi apa?', r:'Pakai tablet gambar, kak! Tapi ini ngaruh ke pajak ya? 😅'},
+    {t:'Stiker apa yang paling laku?', r:'Stiker kucing! Best seller 🐱 (tapi kayaknya bukan itu yang kakak butuhin ya)'},
+    {t:'Followers TikTok kakak berapa?', r:'Lumayan, 40 ribu. Tapi itu bukan omzet kan, kak? 😂'}
+  ],
+  missed:'Kak Dinda menyodorkan rekap sendiri: "Ini berkas lengkapku, kak, maaf lupa kasih tahu!"',
+  choice:{q:'Apa saran utamamu soal NPWP untuk Kak Dinda?', opts:[
+    'Tidak wajib. NPWP hanya untuk PT dan CV.',
+    'Wajib punya NPWP (bisa memakai NIK yang diaktivasi) dan lapor SPT Tahunan, walaupun pajak yang dibayar bisa kecil.',
+    'Cukup punya NPWP nanti kalau omzet sudah Rp4,8 miliar.'], ans:1,
+    exp:'Kewajiban NPWP muncul karena penghasilan sudah melewati PTKP, bukan karena menjadi PKP. Rp4,8 miliar adalah batas PKP untuk PPN, urusannya berbeda.'},
+  form:{title:'Hitung PPh Final Kak Dinda (setahun)', fields:[
+    {id:'a', label:'Omzet yang dikenai pajak', kind:'num', ans:120000000, tol:1, pts:15, hint:'Omzet setahun dikurangi bagian yang tidak kena pajak untuk WP orang pribadi (Rp500 juta).'},
+    {id:'b', label:'Tarif PPh final', kind:'sel', opts:['0,25%','0,5%','1%','2,5%'], ans:'0,5%', pts:10, hint:'Lihat Buku Saku bagian PPh final UMKM.'},
+    {id:'c', label:'PPh final terutang setahun', kind:'num', ans:600000, tol:1, pts:15, hint:'Tarif dikalikan angka di kolom pertama.'}]},
+  explain:['PPh final UMKM = 0,5% × omzet bruto.','WP orang pribadi: omzet sampai Rp500 juta setahun tidak kena pajak, jadi yang dihitung hanya sisanya (Rp620 juta − Rp500 juta = Rp120 juta).','0,5% × Rp120.000.000 = Rp600.000.','Marketplace bisa memungut PPh dari penjual (PMK 37/2025); bagian ini perlu diverifikasi ke sumber resmi DJP.']
+},
+{
+  id:'andi', name:'Bang Andi', topic:'PPN & faktur pajak', bg:'#b8f0d8', av:{style:'cap', hair:'#2b1d1a', skin:'#d9a273', shirt:'#22265a', cap:'#ff6b6b'},
+  intro:'Bro, tokoku "Sneaker Nusa" lagi ngebut! Aku dapat order gede dari PT Langkah Jaya. Katanya harus bikin faktur pajak? Tolong bantu ya 🙏',
+  qs:[
+    {t:'Omzet toko setahun berapa?', r:'Tahun ini sudah Rp5,2 miliar, kak. Alhamdulillah 😆', key:1, note:'Omzet setahun: Rp5.200.000.000'},
+    {t:'Transaksi ke PT Langkah Jaya: barang apa dan harga jualnya berapa?', r:'20 pasang sneakers lokal, totalnya Rp10.000.000 sebelum pajak.', key:1, note:'Harga jual (sebelum PPN): Rp10.000.000, sneakers lokal (bukan barang mewah)'},
+    {t:'Sudah dikukuhkan sebagai PKP belum?', r:'Belum, kak. Selama ini aku nggak pernah pungut PPN.', key:1, note:'Status: belum PKP, belum pernah memungut PPN'},
+    {t:'Sepatunya ada ukuran 45 nggak?', r:'Ada dong! Tapi... itu ngaruh ke pajak? 🤔'},
+    {t:'Ekspedisi yang dipakai apa?', r:'Ada tiga, kak. Yang paling murah dulu 😄'},
+    {t:'Admin tokonya berapa orang?', r:'Dua orang, kak. Tapi bukan itu inti masalahnya kan?'}
+  ],
+  missed:'Bang Andi buru-buru buka laptop: "Nih, kak, semua datanya aku kirim sekalian!"',
+  choice:{q:'Bagaimana status Bang Andi soal PPN?', opts:[
+    'Belum wajib PKP, karena toko online tidak dikenai PPN.',
+    'Wajib dikukuhkan sebagai PKP, karena omzet setahun sudah melewati Rp4,8 miliar.',
+    'Baru wajib PKP kalau omzet sudah Rp10 miliar.'], ans:1,
+    exp:'Batas Rp4,8 miliar berlaku untuk toko fisik maupun toko online. Setelah dikukuhkan sebagai PKP, penjual wajib memungut PPN dan membuat faktur pajak.'},
+  form:{title:'Faktur Pajak: Sneaker Nusa ke PT Langkah Jaya', fields:[
+    {id:'h', kind:'info', label:'Harga jual (sebelum PPN)', val:'Rp10.000.000'},
+    {id:'a', label:'DPP Nilai Lain (11/12 × harga jual)', kind:'num', ans:9166667, tol:1, pts:15, hint:'11 ÷ 12 × 10.000.000, bulatkan ke rupiah.'},
+    {id:'b', label:'Tarif PPN yang dikalikan', kind:'sel', opts:['0%','10%','11%','12%'], ans:'12%', pts:10, hint:'Tarif dalam aturannya 12%. DPP Nilai Lain yang membuat beban efektifnya 11%.'},
+    {id:'c', label:'PPN terutang', kind:'num', ans:1100000, tol:2, pts:15, hint:'Tarif × DPP Nilai Lain.'}]},
+  explain:['Barang/jasa non-mewah: PPN = 12% × (11/12 × harga jual).','11/12 × Rp10.000.000 = Rp9.166.667 (dibulatkan).','12% × Rp9.166.667 ≈ Rp1.100.000, sama dengan 11% × harga jual.','Barang mewah: PPN 12% × harga jual penuh. Mengacu PMK 131/2024, perlu diverifikasi ke sumber resmi DJP.']
+},
+{
+  id:'sari', name:'Bu Sari', topic:'PPh 21 karyawan', bg:'#ffd0a8', av:{style:'hijab', hair:'#ff8a5b', skin:'#f6c39a', shirt:'#8b6cf0'},
+  intro:'Kak, kafeku "Kopi Senja" baru punya 2 karyawan. Tiap bulan aku bingung potong PPh 21. Katanya sekarang pakai TER? Bantuin dong! ☕',
+  qs:[
+    {t:'Status PTKP masing-masing karyawan?', r:'Rio sudah menikah dan punya 1 anak (K/1). Mita masih lajang (TK/0).', key:1, note:'Rio: K/1 · Mita: TK/0'},
+    {t:'Gaji bruto sebulan masing-masing?', r:'Rio Rp8.000.000, Mita Rp7.000.000. Sudah termasuk tunjangan ya, kak.', key:1, note:'Bruto sebulan: Rio Rp8.000.000 · Mita Rp7.000.000'},
+    {t:'Ini pemotongan untuk masa pajak bulan apa?', r:'Bulan Maret, kak.', key:1, note:'Masa pajak: Maret'},
+    {t:'Mesin kopinya merek apa?', r:'Merek Italia, kak. Mahal! Tapi... ini nggak nyambung ya? 😅'},
+    {t:'Kafe buka sampai jam berapa?', r:'Sampai jam 10 malam, kak. Rame terus!'},
+    {t:'Kopi favorit karyawan apa?', r:'Rio suka es kopi susu, Mita suka americano. Eh, kok nanya ini? 😂'}
+  ],
+  missed:'Bu Sari membuka buku catatan gajinya: "Nih, kak, data lengkapnya ada semua!"',
+  choice:{q:'Bagaimana cara menghitung PPh 21 masa Maret untuk karyawan tetap?', opts:[
+    'Pakai tarif efektif rata-rata (TER) bulanan dikalikan penghasilan bruto.',
+    'Pakai tarif Pasal 17 (5%–35%) langsung setiap bulan.',
+    'Tidak dipotong karena gaji di bawah Rp10 juta.'], ans:0,
+    exp:'Masa Januari–November memakai TER. Baru di masa Desember, pajak dihitung ulang dengan tarif Pasal 17 untuk setahun penuh.'},
+  form:{title:'Bukti Potong PPh 21 · Masa Maret', fields:[
+    {id:'g1', kind:'grp', label:'Rio (K/1, Rp8.000.000)'},
+    {id:'ra', label:'Kategori TER Rio', kind:'sel', opts:['A','B','C'], ans:'B', pts:5, hint:'K/1 satu kategori dengan TK/2, TK/3, dan K/2.'},
+    {id:'rb', label:'Tarif TER Rio', kind:'sel', opts:['0,75%','1%','1,25%','1,5%'], ans:'1%', pts:5, hint:'Cari baris yang memuat Rp8.000.000 di tabel kategori Rio.'},
+    {id:'rc', label:'PPh 21 Rio', kind:'num', ans:80000, tol:1, pts:10, hint:'Tarif × penghasilan bruto sebulan.'},
+    {id:'g2', kind:'grp', label:'Mita (TK/0, Rp7.000.000)'},
+    {id:'ma', label:'Kategori TER Mita', kind:'sel', opts:['A','B','C'], ans:'A', pts:5, hint:'TK/0, TK/1, dan K/0 masuk kategori yang sama.'},
+    {id:'mb', label:'Tarif TER Mita', kind:'sel', opts:['0,75%','1%','1,25%','1,5%'], ans:'1,25%', pts:5, hint:'Cari baris yang memuat Rp7.000.000 di tabel kategori Mita.'},
+    {id:'mc', label:'PPh 21 Mita', kind:'num', ans:87500, tol:1, pts:10, hint:'Tarif × penghasilan bruto sebulan.'}]},
+  explain:['Kategori A: TK/0, TK/1, K/0. Kategori B: TK/2, TK/3, K/1, K/2. Kategori C: K/3.','Rio (B): Rp8.000.000 masuk baris tarif 1% → Rp80.000.','Mita (A): Rp7.000.000 masuk baris tarif 1,25% → Rp87.500.','Rumus: PPh 21 = tarif TER × penghasilan bruto sebulan. Tabel mengacu PMK 168/2023, perlu diverifikasi ke sumber resmi DJP.']
+},
+{
+  id:'bagas', name:'Kang Bagas', topic:'SPT & sanksi', bg:'#cbbcff', mood0:'worried', av:{style:'spiky', hair:'#2b1d1a', skin:'#c98e5f', shirt:'#4cc9f0', glasses:1},
+  intro:'Kak... aku baru sadar SPT Tahunanku belum dilapor. Hari ini 15 April 2026. Aku bakal dipenjara nggak?! 😱',
+  qs:[
+    {t:'SPT apa yang belum dilapor, dan kamu wajib pajak apa?', r:'SPT Tahunan PPh Orang Pribadi tahun pajak 2025, kak. Aku karyawan.', key:1, note:'Jenis: SPT Tahunan PPh Orang Pribadi (tahun pajak 2025)'},
+    {t:'Ada pajak kurang bayar nggak?', r:'Nggak ada, kak. Nihil. Gajiku sudah dipotong perusahaan tiap bulan.', key:1, note:'Pajak kurang bayar: nihil'},
+    {t:'Batas lapornya kapan, dan hari ini tanggal berapa?', r:'Batasnya 31 Maret 2026, hari ini 15 April 2026. Telat 15 hari.', key:1, note:'Batas lapor: 31 Maret 2026 · Hari ini: 15 April 2026'},
+    {t:'Kantor kamu di mana?', r:'Di Kudus, kak. Tapi ini penting ya buat pajaknya? 😰'},
+    {t:'Naik motor apa ke kantor?', r:'Motor matic biasa, kak. Kok nanya motor? 😅'},
+    {t:'Sudah sarapan belum?', r:'Belum, kak... panik dari tadi pagi 🥲'}
+  ],
+  missed:'Kang Bagas menunjukkan layar HP-nya: "Ini data lengkapku, kak. Maaf tadi panik!"',
+  choice:{q:'Sanksi apa yang dihadapi Kang Bagas?', opts:[
+    'Sanksi administrasi berupa denda tetap karena terlambat lapor SPT.',
+    'Bunga 2% per bulan dari seluruh penghasilan setahun.',
+    'Langsung dipidana penjara.'], ans:0,
+    exp:'Telat lapor dikenai sanksi administrasi berupa denda tetap. Pidana hanya untuk pelanggaran serius, misalnya sengaja tidak melapor atau melaporkan dengan tidak benar.'},
+  form:{title:'Daftar Denda Keterlambatan SPT', fields:[
+    {id:'a', label:'Kang Bagas · SPT Tahunan PPh Orang Pribadi', kind:'sel', opts:['Rp100.000','Rp500.000','Rp1.000.000','Rp2.000.000'], ans:'Rp100.000', pts:13, hint:'Ingat: OP paling ringan di antara ketiganya.'},
+    {id:'b', label:'Toko Andi · SPT Masa PPN', kind:'sel', opts:['Rp100.000','Rp500.000','Rp1.000.000','Rp2.000.000'], ans:'Rp500.000', pts:13, hint:'SPT Masa PPN dendanya di tengah-tengah.'},
+    {id:'c', label:'CV Kopi Kita · SPT Tahunan PPh Badan', kind:'sel', opts:['Rp100.000','Rp500.000','Rp1.000.000','Rp2.000.000'], ans:'Rp1.000.000', pts:14, hint:'Badan (perusahaan) dendanya paling besar.'}]},
+  explain:['SPT Tahunan PPh Orang Pribadi: Rp100.000.','SPT Masa PPN: Rp500.000.','SPT Tahunan PPh Badan: Rp1.000.000. SPT Masa lainnya: Rp100.000.','Jika ada pajak kurang bayar, ada tambahan bunga per bulan (tidak dihitung di prototipe ini). Nominal denda perlu diverifikasi ke sumber resmi DJP.']
+}
+];
+
+const BOOK = `
+<details><summary>🪪 NPWP dan kewajiban dasar</summary><div class="dbody"><ul>
+<li>Orang pribadi yang penghasilannya melewati PTKP (Rp54 juta setahun untuk diri sendiri) wajib memiliki NPWP.</li>
+<li>NIK di KTP sudah berfungsi sebagai NPWP untuk orang pribadi, setelah diaktivasi.</li>
+<li>Punya NPWP berarti wajib lapor SPT, walaupun pajak yang dibayar nol.</li></ul><span class="ver">perlu diverifikasi ke sumber resmi DJP</span></div></details>
+<details><summary>🏪 PPh final UMKM</summary><div class="dbody"><ul>
+<li>Tarif 0,5% dari omzet bruto (PP 55/2022).</li>
+<li>WP orang pribadi: omzet sampai Rp500 juta setahun tidak kena pajak. Yang dikenai hanya omzet di atasnya.</li>
+<li>Jangka waktu pemakaian: orang pribadi 7 tahun, badan tertentu lebih singkat.</li></ul><span class="ver">perlu diverifikasi ke sumber resmi DJP</span></div></details>
+<details><summary>👥 PPh 21 dengan TER</summary><div class="dbody">
+<ul><li>Masa Januari–November: PPh 21 = tarif TER × penghasilan bruto sebulan. Desember dihitung ulang dengan tarif Pasal 17.</li>
+<li>Kategori A: TK/0, TK/1, K/0 · Kategori B: TK/2, TK/3, K/1, K/2 · Kategori C: K/3.</li></ul>
+<b>Cuplikan tabel (bruto sebulan sampai dengan)</b>
+<table class="ter"><tr><th colspan="2">Kategori A</th></tr>
+<tr><td>5.400.000</td><td>0%</td></tr><tr><td>5.650.000</td><td>0,25%</td></tr><tr><td>5.950.000</td><td>0,5%</td></tr><tr><td>6.300.000</td><td>0,75%</td></tr><tr><td>6.750.000</td><td>1%</td></tr><tr><td>7.500.000</td><td>1,25%</td></tr><tr><td>8.550.000</td><td>1,5%</td></tr><tr><td>9.650.000</td><td>1,75%</td></tr></table>
+<table class="ter"><tr><th colspan="2">Kategori B</th></tr>
+<tr><td>6.200.000</td><td>0%</td></tr><tr><td>6.500.000</td><td>0,25%</td></tr><tr><td>6.850.000</td><td>0,5%</td></tr><tr><td>7.300.000</td><td>0,75%</td></tr><tr><td>9.200.000</td><td>1%</td></tr><tr><td>10.750.000</td><td>1,5%</td></tr><tr><td>11.250.000</td><td>2%</td></tr></table>
+<table class="ter"><tr><th colspan="2">Kategori C</th></tr>
+<tr><td>6.600.000</td><td>0%</td></tr><tr><td>6.950.000</td><td>0,25%</td></tr><tr><td>7.350.000</td><td>0,5%</td></tr><tr><td>7.800.000</td><td>0,75%</td></tr><tr><td>8.850.000</td><td>1%</td></tr><tr><td>9.800.000</td><td>1,25%</td></tr><tr><td>10.950.000</td><td>1,5%</td></tr></table>
+<span class="ver">cuplikan PMK 168/2023, perlu diverifikasi ke sumber resmi DJP</span></div></details>
+<details><summary>🧾 PPN dan faktur pajak</summary><div class="dbody"><ul>
+<li>Barang/jasa non-mewah: PPN = 12% × DPP Nilai Lain (11/12 × harga jual). Efektifnya 11% dari harga jual.</li>
+<li>Barang mewah: PPN = 12% × harga jual.</li>
+<li>Wajib dikukuhkan sebagai PKP jika omzet setahun melebihi Rp4,8 miliar.</li>
+<li>PKP wajib membuat faktur pajak atas penyerahan barang/jasa kena pajak.</li></ul><span class="ver">perlu diverifikasi ke sumber resmi DJP</span></div></details>
+<details><summary>⏰ Sanksi telat lapor SPT</summary><div class="dbody"><ul>
+<li>SPT Tahunan PPh Orang Pribadi: denda Rp100.000 (batas lapor 31 Maret).</li>
+<li>SPT Tahunan PPh Badan: denda Rp1.000.000 (batas lapor 30 April).</li>
+<li>SPT Masa PPN: denda Rp500.000. SPT Masa lainnya: Rp100.000.</li>
+<li>Pajak kurang bayar yang telat disetor menambah sanksi bunga per bulan.</li></ul><span class="ver">perlu diverifikasi ke sumber resmi DJP</span></div></details>`;
+
+/* ===== STATE ===== */
+let S = {name:'', av:0, res:{}};
+try { const d = localStorage.getItem('kpn_v1'); if (d) S = Object.assign(S, JSON.parse(d)); } catch (e) {}
+const save = () => { try { localStorage.setItem('kpn_v1', JSON.stringify(S)); } catch (e) {} };
+let scr = 'start', draft = S.name || '', M = null, calcExpr = '';
+const C = () => CL.find(x => x.id === M.cid);
+
+function toast(msg) {
+  const t = $('#toast'); t.innerHTML = '<div class="toast" role="status">' + esc(msg) + '</div>';
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.innerHTML = '', 2400);
+}
+
+/* ===== VIEW ===== */
+function draw(keep) {
+  const y = window.scrollY;
+  $('#app').innerHTML = scr === 'start' ? startHTML() : scr === 'hub' ? hubHTML() : scr === 'mission' ? missionHTML() : raporHTML();
+  window.scrollTo(0, keep ? y : 0);
+}
+
+function startHTML() {
+  const has = S.name && Object.keys(S.res).length;
+  return `<div class="hero">
+    ${SCENE}
+    <h1 class="title">Konsultan Pajak</h1><h1 class="title two">Nusantara</h1>
+  </div>
+  <div class="mascot-row" style="margin-top:14px">${RUPI}<div class="say">Halo! Aku <b>Si Rupi</b>. Hari ini kamu magang jadi konsultan pajak. Ada 4 klien yang butuh bantuan!</div></div>
+  <div class="card stack">
+    <div><label class="field-l" for="nm">Nama konsultan</label><input id="nm" class="txt" maxlength="18" placeholder="Ketik namamu" value="${esc(draft)}" autocomplete="off"></div>
+    <div><span class="field-l">Pilih karaktermu</span><div class="avs">${AV.map((a, i) => `<button class="avb" data-act="av" data-i="${i}" aria-pressed="${S.av === i}" aria-label="Karakter ${i + 1}">${avatar(a, 'happy')}</button>`).join('')}</div></div>
+    <button class="btn mint" data-act="start">Mulai magang!</button>
+    ${has ? '<button class="btn white" data-act="resume">Lanjutkan progres</button>' : ''}
+  </div>
+  <p class="foot">Materi mengacu aturan yang diketahui per 2026. Nominal dan tarif perlu diverifikasi ke pajak.go.id.</p>`;
+}
+
+function hubHTML() {
+  const done = CL.filter(c => S.res[c.id]).length;
+  const tot = CL.reduce((a, c) => a + (S.res[c.id] ? S.res[c.id].total : 0), 0);
+  const tips = ['Pilih klien mana saja. Urutan bebas!', 'Tanya yang penting dulu. Kuota pertanyaan cuma 4!', 'Buku Saku membantu, tapi membukanya saat misi mengurangi 5 poin.', 'Kalkulator 🧮 ada di dalam misi.'];
+  const say = done === 4 ? 'Semua klien beres! Cek Rapor Magangmu ya!' : tips[done % tips.length];
+  return `<div class="card"><div class="head"><div class="me">${avatar(AV[S.av], 'happy')}</div>
+    <div style="flex:1"><b>${esc(S.name || 'Konsultan')}</b><br><span class="pill">🪙 ${tot} poin</span><span class="pill">👥 ${done}/4 klien</span></div></div>
+    <div class="bar" aria-label="Progres klien"><i style="width:${done * 25}%"></i></div></div>
+  <div class="mascot-row" style="margin-bottom:6px">${RUPI.replace('class="rupi"', 'class="rupi" style="animation:none;width:72px"')}<div class="say">${say}</div></div>
+  <div class="grid">${CL.map(c => {
+    const r = S.res[c.id];
+    return `<div class="cl" role="button" tabindex="0" data-act="open" data-id="${c.id}"><div class="cav" style="background:${c.bg}">${avatar(c.av, c.mood0 || 'happy')}</div><b>${c.name}</b><small>${c.topic}</small>${r ? `<span class="badge ok">✔ ${r.total}/100</span>` : '<span class="badge">Belum dikerjakan</span>'}</div>`;
+  }).join('')}</div>
+  <div class="row2"><button class="btn sky" data-act="book">📖 Buku Saku</button><button class="btn ${done === 4 ? 'coral pulse' : 'white'}" data-act="rapor">🧾 Rapor</button></div>
+  <p class="foot">Nominal dan tarif perlu diverifikasi ke sumber resmi DJP.</p>`;
+}
+
+function notesHTML() {
+  if (!M.notes.length) return M.phase === 'chat' ? '<div class="note empty">📝 Catatan masih kosong. Tanyakan hal yang penting dulu!</div>' : '';
+  return `<div class="note"><b>📝 Catatan klien</b><ul>${M.notes.map(n => `<li>${n}</li>`).join('')}</ul></div>`;
+}
+
+function missionHTML() {
+  const cl = C(), ph = M.phase, idx = {chat:0, choice:1, form:2, result:3}[ph];
+  const mood = ph === 'result' ? M.mood : (cl.mood0 || 'happy');
+  let body = '';
+  if (ph === 'chat') {
+    const left = 4 - M.asked.length;
+    body = `<div class="chat" aria-live="polite">
+      <div class="msg"><div class="mini" style="background:${cl.bg}">${avatar(cl.av, cl.mood0 || 'happy')}</div><div class="bubble">${cl.intro}</div></div>
+      ${M.chat.map((m, k) => m.me ? `<div class="msg me pop"><div class="bubble">${m.me}</div></div>` : `<div class="msg pop"><div class="mini" style="background:${cl.bg}">${avatar(cl.av, 'happy')}</div><div class="bubble">${m.them}</div></div>`).join('')}
+    </div>
+    ${notesHTML()}
+    <div class="quota">Sisa pertanyaan: ${[0, 1, 2, 3].map(i => `<span class="coin ${i >= left ? 'used' : ''}">🪙</span>`).join('')}</div>
+    <div class="qs">${cl.qs.map((q, i) => `<button class="q" data-act="ask" data-i="${i}" ${M.asked.includes(i) || left <= 0 ? 'disabled' : ''}>${q.t}</button>`).join('')}</div>
+    <button class="btn mint" data-act="endint" ${M.asked.length ? '' : 'disabled'}>${left <= 0 ? 'Lanjut ke keputusan' : 'Cukup bertanya, lanjut'}</button>`;
+  } else if (ph === 'choice') {
+    const ch = cl.choice;
+    body = `${M.flash ? `<div class="fb">${M.flash}</div><div style="height:12px"></div>` : ''}${notesHTML()}
+    <div class="card"><h3>${ch.q}</h3>
+    ${ch.opts.map((o, i) => `<button class="opt ${M.cwrong.includes(i) ? 'bad' : ''} ${M.cdone && i === ch.ans ? 'good' : ''}" data-act="pick" data-i="${i}" ${M.cdone || M.cwrong.includes(i) ? 'disabled' : ''}>${o}</button>`).join('')}
+    ${M.cdone ? `<div class="fb">${M.cok ? '🎉 Tepat! ' : '💡 Jawaban yang benar sudah ditandai hijau. '}${ch.exp}</div>` : M.cwrong.length ? '<div class="fb shake">Belum tepat. Coba sekali lagi (poin jadi setengah).</div>' : ''}
+    </div>
+    ${M.cdone ? '<button class="btn mint" data-act="toform">Lanjut ke formulir</button>' : ''}`;
+  } else if (ph === 'form') {
+    const f = cl.form;
+    body = `${notesHTML()}<div class="doc"><span class="ribbon">FORMULIR</span><h3>${f.title}</h3>${f.fields.map(fieldHTML).join('')}</div>
+    ${M.fdone ? '<button class="btn mint" data-act="finish">Lihat hasil</button>' : `<button class="btn" data-act="check">Periksa jawaban</button><p class="muted center">Kesempatan ${2 - M.ftry}x lagi. Jawaban benar di percobaan kedua bernilai setengah.</p>`}`;
+  } else {
+    const r = M, msg = r.total >= 80 ? 'Mantap sekali! Urusan pajakku aman berkat kamu 🎉' : r.total >= 50 ? 'Lumayan, tapi masih ada yang perlu dibenahi ya...' : 'Waduh, kayaknya aku masih rawan kena denda nih...';
+    body = `<div class="card center"><div class="big" style="background:${cl.bg}">${avatar(cl.av, r.mood)}</div><div class="bubble" style="max-width:100%;border-radius:18px;margin:8px 0 12px">${msg}</div>
+      <span class="stamp">SELESAI</span>
+      <div style="margin-top:14px;text-align:left">
+      <div class="score"><span>💬 Wawancara</span><b>${r.pts.i}/30</b></div>
+      <div class="score"><span>🧠 Keputusan</span><b>${r.pts.c}/30</b></div>
+      <div class="score"><span>📝 Formulir</span><b>${r.pts.f}/40</b></div>
+      ${r.pen ? `<div class="score"><span>📖 Buku saku</span><b>−${r.pen}</b></div>` : ''}
+      <div class="score total"><span>Total</span><b>${r.total}/100</b></div></div></div>
+    <div class="card"><h3>Yang perlu kamu ingat</h3><ul class="pts">${cl.explain.map(e => `<li>${e}</li>`).join('')}</ul></div>
+    <div class="row2"><button class="btn white" data-act="open" data-id="${cl.id}">Ulangi</button><button class="btn mint" data-act="hub">Ke kantor</button></div>`;
+  }
+  const steps = ['Wawancara', 'Keputusan', 'Formulir'];
+  return `<div class="mbar"><button class="icon" data-act="exit" aria-label="Kembali ke kantor">←</button><div class="mtitle"><b>${cl.name}</b><span>${cl.topic}</span></div><button class="icon" data-act="calc" aria-label="Kalkulator">🧮</button><button class="icon" data-act="book" aria-label="Buku saku">📖</button></div>
+  <div class="steps">${steps.map((s, i) => `<span class="${i < idx ? 'done' : i === idx ? 'on' : ''}">${i < idx ? '✔ ' : ''}${s}</span>`).join('')}</div>${body}`;
+}
+
+function fieldHTML(f) {
+  if (f.kind === 'grp') return `<div class="grp">${f.label}</div>`;
+  if (f.kind === 'info') return `<div class="frow info"><span>${f.label}</span><b>${f.val}</b></div>`;
+  const st = M.fs[f.id] || '', locked = /^ok|reveal/.test(st);
+  const val = st === 'reveal' ? (f.kind === 'num' ? f.ans.toLocaleString('id-ID') : f.ans) : (M.vals[f.id] || '');
+  const inp = f.kind === 'num'
+    ? `<div class="inwrap"><i>Rp</i><input inputmode="numeric" autocomplete="off" aria-label="${f.label}" data-fid="${f.id}" data-kind="num" value="${val}" ${locked ? 'disabled' : ''}></div>`
+    : `<select aria-label="${f.label}" data-fid="${f.id}" data-kind="sel" ${locked ? 'disabled' : ''}><option value="">Pilih…</option>${f.opts.map(o => `<option ${val === o ? 'selected' : ''}>${o}</option>`).join('')}</select>`;
+  const cls = /^ok/.test(st) ? 'ok' : st === 'bad' ? 'bad' : st === 'reveal' ? 'reveal' : '';
+  const note = /^ok/.test(st) ? '<div class="hint">✔ Benar!</div>' : st === 'bad' ? `<div class="hint">✖ Belum tepat. Petunjuk: ${f.hint}</div>` : st === 'reveal' ? '<div class="hint">💡 Ini jawaban yang benar.</div>' : '';
+  return `<div class="frow ${cls}"><label>${f.label}</label>${inp}${note}</div>`;
+}
+
+function raporHTML() {
+  const rs = CL.map(c => S.res[c.id] ? S.res[c.id].total : null);
+  const avg = Math.round(rs.reduce((a, b) => a + (b || 0), 0) / 4);
+  const done = rs.filter(x => x !== null).length;
+  const title = done < 4 ? 'Masih magang...' : avg >= 90 ? 'Konsultan Pajak Bintang 5 ⭐' : avg >= 75 ? 'Konsultan Andal 💼' : avg >= 50 ? 'Konsultan Junior Rajin 📒' : 'Magang Perlu Ngulang 🔁';
+  const code = 'KPN-' + btoa(unescape(encodeURIComponent(S.name + '|' + rs.map(x => x === null ? '-' : x).join('.'))));
+  return `<div class="card center"><div class="me" style="width:96px;height:96px;margin:0 auto 8px">${avatar(AV[S.av], avg >= 50 ? 'joy' : 'think')}</div>
+    <h2>${esc(S.name || 'Konsultan')}</h2><p style="margin:4px 0 0;font-weight:600">${title}</p>
+    <div class="score total" style="justify-content:center;gap:10px"><span>Rata-rata</span><b>${avg}/100</b></div></div>
+  <div class="card"><table class="rap">${CL.map((c, i) => `<tr><td>${c.name}<br><small style="font-weight:500">${c.topic}</small></td><td>${rs[i] === null ? '—' : rs[i] + '/100'}</td></tr>`).join('')}</table></div>
+  <div class="card"><b>Kode hasil untuk guru</b><p class="muted" style="margin:4px 0 8px">Salin kode ini dan kirim ke gurumu.</p><div class="code" id="code">${code}</div><div style="height:10px"></div><button class="btn sky" data-act="copy">Salin kode</button></div>
+  <div class="row2"><button class="btn mint" data-act="hub">Ke kantor</button><button class="btn white" data-act="reset">Mulai ulang</button></div>`;
+}
+
+/* ===== SHEET ===== */
+function openSheet(html) { $('#sheet').innerHTML = `<div class="sheet-wrap" data-act="closebg"><div class="sheet" role="dialog" aria-modal="true">${html}<div style="height:12px"></div><button class="btn white" data-act="closesheet">Tutup</button></div></div>`; }
+function closeSheet() { $('#sheet').innerHTML = ''; }
+function calcHTML() {
+  const ks = ['C', '⌫', '÷', '×', '7', '8', '9', '−', '4', '5', '6', '+', '1', '2', '3', '=', '0', '.', '(', ')'];
+  return `<h2>🧮 Kalkulator</h2><div class="disp" id="disp">${esc(calcExpr) || '0'}</div><div class="keys">${ks.map(k => `<button data-act="ck" data-k="${k}" class="${'÷×−+'.includes(k) ? 'op' : k === '=' ? 'eq' : k === 'C' ? 'cl2' : ''}">${k}</button>`).join('')}</div>`;
+}
+function calcKey(k) {
+  if (calcExpr === 'Error') calcExpr = '';
+  if (k === 'C') calcExpr = '';
+  else if (k === '⌫') calcExpr = calcExpr.slice(0, -1);
+  else if (k === '=') {
+    try {
+      const ex = calcExpr.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-');
+      if (ex && /^[0-9+\-*/.() ]+$/.test(ex)) calcExpr = String(Math.round(Function('"use strict";return (' + ex + ')')() * 1e6) / 1e6);
+    } catch (e) { calcExpr = 'Error'; }
+  } else calcExpr += k;
+  $('#disp').textContent = calcExpr || '0';
+}
+
+/* ===== LOGIKA MISI ===== */
+function startMission(id) {
+  M = {cid:id, phase:'chat', asked:[], notes:[], chat:[], pts:{i:0, c:0, f:0}, pen:0, cwrong:[], cdone:false, cok:false, vals:{}, fs:{}, ftry:0, fdone:false, flash:'', total:0, mood:'happy'};
+  scr = 'mission'; draw();
+}
+function ask(i) {
+  const q = C().qs[i];
+  if (M.asked.includes(i) || M.asked.length >= 4) return;
+  M.asked.push(i); M.chat.push({me:q.t}, {them:q.r});
+  if (q.key) { M.pts.i += 10; M.notes.push(q.note); }
+  draw(true);
+}
+function endInterview() {
+  const missed = [];
+  C().qs.forEach((q, i) => { if (q.key && !M.asked.includes(i)) { M.notes.push(q.note); missed.push(q); } });
+  M.flash = missed.length ? '🙈 ' + C().missed + ' (Kamu tidak menanyakan ' + missed.length + ' hal penting, jadi tidak ada poin untuk itu.)' : '';
+  M.phase = 'choice'; draw();
+}
+function pick(i) {
+  const ch = C().choice;
+  if (i === ch.ans) { M.pts.c = M.cwrong.length ? 15 : 30; M.cdone = true; M.cok = true; }
+  else { M.cwrong.push(i); if (M.cwrong.length >= 2) { M.cdone = true; M.cok = false; M.pts.c = 0; } }
+  draw(true);
+}
+function checkForm() {
+  M.ftry++;
+  C().form.fields.forEach(fl => {
+    if (fl.kind === 'grp' || fl.kind === 'info') return;
+    if (/^ok/.test(M.fs[fl.id] || '')) return;
+    const v = M.vals[fl.id] || '';
+    let ok = false;
+    if (fl.kind === 'num') { const n = parseInt(String(v).replace(/\D/g, ''), 10); ok = !isNaN(n) && Math.abs(n - fl.ans) <= (fl.tol || 1); }
+    else ok = v === fl.ans;
+    if (ok) { M.fs[fl.id] = M.ftry === 1 ? 'ok1' : 'ok2'; M.pts.f += M.ftry === 1 ? fl.pts : Math.round(fl.pts / 2); }
+    else M.fs[fl.id] = M.ftry >= 2 ? 'reveal' : 'bad';
+  });
+  const all = C().form.fields.filter(f => f.pts).every(f => /^ok/.test(M.fs[f.id] || ''));
+  if (all || M.ftry >= 2) M.fdone = true;
+  draw(true);
+}
+function finish() {
+  const cl = C(), raw = M.pts.i + M.pts.c + M.pts.f, total = Math.max(0, raw - M.pen);
+  M.total = total; M.mood = total >= 80 ? 'joy' : total >= 50 ? 'think' : 'worried';
+  const prev = S.res[cl.id];
+  if (!prev || total >= prev.total) S.res[cl.id] = {i:M.pts.i, c:M.pts.c, f:M.pts.f, pen:M.pen, total};
+  save(); M.phase = 'result'; draw();
+}
+function openBook() {
+  if (scr === 'mission' && M && M.phase !== 'result' && !M.pen) { M.pen = 5; toast('Buku saku dibuka: −5 poin untuk klien ini'); }
+  openSheet('<h2>📖 Buku Saku Pajak</h2><p class="muted" style="margin:0">Ringkasan aturan. Semua angka perlu dicek ulang ke sumber resmi DJP.</p>' + BOOK);
+}
+
+/* ===== EVENT ===== */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const a = b.dataset.act, i = +b.dataset.i;
+  if (a === 'closebg') { if (e.target === b) closeSheet(); return; }
+  switch (a) {
+    case 'av': S.av = i; draw(true); break;
+    case 'start': S.name = (draft || '').trim() || 'Konsultan Muda'; S.res = {}; save(); scr = 'hub'; draw(); break;
+    case 'resume': scr = 'hub'; draw(); break;
+    case 'open': closeSheet(); startMission(b.dataset.id); break;
+    case 'exit': case 'hub': scr = 'hub'; M = null; draw(); break;
+    case 'book': openBook(); break;
+    case 'calc': calcExpr = ''; openSheet(calcHTML()); break;
+    case 'ck': calcKey(b.dataset.k); break;
+    case 'closesheet': closeSheet(); break;
+    case 'ask': ask(i); break;
+    case 'endint': endInterview(); break;
+    case 'pick': pick(i); break;
+    case 'toform': M.phase = 'form'; draw(); break;
+    case 'check': checkForm(); break;
+    case 'finish': finish(); break;
+    case 'rapor': scr = 'rapor'; draw(); break;
+    case 'copy': {
+      const t = $('#code').textContent;
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(() => toast('Kode disalin'), () => toast('Salin manual: tekan lama pada kode'));
+      else toast('Salin manual: tekan lama pada kode');
+      break;
+    }
+    case 'reset': if (confirm('Hapus semua progres dan mulai dari awal?')) { S = {name:'', av:0, res:{}}; draft = ''; save(); scr = 'start'; draw(); } break;
+  }
+});
+document.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('cl')) { e.preventDefault(); e.target.click(); }
+});
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.id === 'nm') { draft = t.value; return; }
+  if (t.dataset && t.dataset.fid) {
+    if (t.dataset.kind === 'num') { const d = t.value.replace(/\D/g, ''); t.value = d ? Number(d).toLocaleString('id-ID') : ''; }
+    M.vals[t.dataset.fid] = t.value;
+  }
+});
+
+draw();
+</script>
+</body>
+</html>
